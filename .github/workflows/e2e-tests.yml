@@ -12,8 +12,14 @@ env:
   WASP_TELEMETRY_DISABLE: 1
   WASP_VERSION: 0.16.0
 
+# Cancel superseded PR checks; keep every non-PR invocation independent.
+concurrency:
+  group: e2e-tests.yml-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
 
     steps:
